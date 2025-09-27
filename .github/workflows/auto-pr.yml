@@ -10,6 +10,8 @@ on:
       - "feat/*"  # runs when pushing feature branches
       - "fix/*"   # runs when pushing fix branches
       - "chore/*" # runs when pushing chore branches
+  pull_request:
+    types: [opened]
 
 # jobs:
 #   create-pr:
@@ -52,3 +54,13 @@ jobs:
         pr_draft: false                                    # Creates pull request as draft
         pr_allow_empty: true                              # Creates pull request even if there are no changes
         github_token: ${{ secrets.GITHUB_TOKEN }}      # If blank, default: secrets.GITHUB_TOKEN
+  add-reviews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kentaro-m/auto-assign-action@v2.0.0
+        with:
+          addReviewers: true          # Set to true to add reviewers to pull requests
+          addAssignees: true          # Set to true to add assignees to pull requests
+          reviewers:
+            - rachmadideni
+          numberOfReviewers: 1
