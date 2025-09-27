@@ -1,0 +1,28 @@
+name: Auto Create Pull Request
+
+on:
+  push:
+    branches:
+      - "feat/*"  # runs when pushing feature branches
+      - "fix/*"   # runs when pushing fix branches
+      - "chore/*" # runs when pushing chore branches
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: dev
+          branch: ${{ github.ref.name }}
+          title: "Auto PR - ${{ github.ref.name }}"
+          body: |
+            This PR was automatically created for branch `${{ github.ref_name }}`.
+            
+            **Details:**
+            - Triggered by push to `${{ github.ref_name }}`
