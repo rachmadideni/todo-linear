@@ -58,8 +58,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: kentaro-m/auto-assign-action@v2.0.0
-        with:
-          addReviewers: true          # Set to true to add reviewers to pull requests
-          addAssignees: true          # Set to true to add assignees to pull requests
-          reviewers: "rachmadideni"
-          numberOfReviewers: 1
