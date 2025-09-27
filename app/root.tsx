@@ -4,11 +4,22 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration,   
+  redirect, 
+  useLoaderData,
+  type LoaderFunction
 } from "react-router";
+
+import { 
+  ThemeProvider, 
+  useTheme,
+  PreventFlashOnWrongTheme, 
+} from "remix-themes";  // or your own utils
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { themeSessionResolver } from "./sessions.server";
+import { cn } from "./lib/utils";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,17 +34,21 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function App() {
+  const data = useLoaderData();
+  const [theme] = useTheme();
   return (
-    <html lang="en">
+    <html lang="en" className={cn(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
       <body>
-        {children}
+        {/* {children} */}
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -41,9 +56,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
-  return <Outlet />;
+export default function AppWithProviders() {
+  const { theme } = useLoaderData();
+  return (
+    <ThemeProvider specifiedTheme={theme} themeAction="/action/set-theme">
+      <App />
+    </ThemeProvider>
+  );
 }
+
+// Return the theme from the session storage using the loader
+export const loader: LoaderFunction = async ({ request }) => {
+  const { getTheme } = await themeSessionResolver(request);
+  return {
+    theme: getTheme(),
+  };
+};
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
