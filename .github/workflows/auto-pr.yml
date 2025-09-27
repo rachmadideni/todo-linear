@@ -11,7 +11,7 @@ on:
       - "fix/*"   # runs when pushing fix branches
       - "chore/*" # runs when pushing chore branches
   pull_request:
-    types: [opened]
+    types: [opened, reopened, ready_for_review]
 
 # jobs:
 #   create-pr:
@@ -57,4 +57,8 @@ jobs:
   add-reviews:
     runs-on: ubuntu-latest
     steps:
-      - uses: kentaro-m/auto-assign-action@v2.0.0
+      - name: auto assign
+        uses: kentaro-m/auto-assign-action@v2.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/auto_assign.yml
