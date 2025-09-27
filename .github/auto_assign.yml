@@ -1,0 +1,4 @@
+addReviewers: true          # Set to true to add reviewers to pull requests
+addAssignees: true          # Set to true to add assignees to pull requests
+reviewers: "rachmadideni"
+numberOfReviewers: 1
