@@ -14,12 +14,12 @@ import {
   ThemeProvider, 
   useTheme,
   PreventFlashOnWrongTheme, 
-} from "remix-themes";  // or your own utils
+} from "remix-themes";
 
 import type { Route } from "./+types/root";
-import "./app.css";
 import { themeSessionResolver } from "./sessions.server";
 import { cn } from "./lib/utils";
+import "./app.css";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -47,7 +47,6 @@ export function App() {
         <Links />
       </head>
       <body>
-        {/* {children} */}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
